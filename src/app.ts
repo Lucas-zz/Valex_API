@@ -2,18 +2,14 @@ import cors from "cors";
 import 'express-async-errors';
 import express, { json, Request, Response, NextFunction } from "express";
 
+import router from "./routers/cardRouter.js";
+import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
+
 const app = express();
 
 app.use(cors());
 app.use(json());
-
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-    console.log(error);
-    if (error.response) {
-        return res.sendStatus(error.response.status);
-    }
-
-    res.sendStatus(500);
-});
+app.use(router);
+app.use(errorHandlerMiddleware);
 
 export default app;
