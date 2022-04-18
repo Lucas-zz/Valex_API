@@ -1,6 +1,7 @@
 import * as businessRepository from "../repositories/businessRepository.js";
 
 export async function findByBusinessId(businessId: number, cardType: string) {
+
     const businessData = await businessRepository.findById(businessId);
 
     if (!businessData) {

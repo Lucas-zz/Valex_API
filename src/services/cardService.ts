@@ -68,8 +68,8 @@ export async function findByCardId(cardId: number) {
     return cardData;
 }
 
-export async function findByCardDetails(number: string, cardHolderName: string, expirationDate: string) {
-    const cardData: cardRepository.Card = await cardRepository.findByCardDetails(number, cardHolderName, expirationDate);
+export async function findByCardDetails(number: string, cardholderName: string, expirationDate: string) {
+    const cardData: cardRepository.Card = await cardRepository.findByCardDetails(number, cardholderName, expirationDate);
 
     if (!cardData) {
         throw { type: "not_found", message: "card not found" }
@@ -89,7 +89,7 @@ export function isExpired(date: string) {
 }
 
 export function checkPassword(password: string, encryptedPassword: string) {
-    if (!bcrypt.compareSync(password, encryptedPassword)) {
+    if (!cryptUtils.decrypt(password, encryptedPassword)) {
         throw { type: "unauthorized", message: "password does not match" }
     }
 }

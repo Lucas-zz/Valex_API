@@ -6,7 +6,7 @@ const posPaymentSchema = joi.object({
     cardId: joi.number().required(),
     password: joi.string().pattern(cardPasswordPattern).required(),
     businessId: joi.number().required(),
-    amount: joi.number().min(1).required()
+    amount: joi.number().required()
 });
 
 export default posPaymentSchema;

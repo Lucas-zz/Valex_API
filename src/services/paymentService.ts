@@ -11,8 +11,9 @@ export async function posPayment(cardId: number, password: string, businessId: n
         throw { type: "forbidden", message: "blocked card" }
     }
 
+    cardService.checkPassword(password, cardData.password);
     cardService.isExpired(cardData.expirationDate);
-    businessService.findByBusinessId(businessId, cardData.type);
+    await businessService.findByBusinessId(businessId, cardData.type);
 
     if (amount <= 0) {
         throw { type: "bad_request", message: "payment value must be higher than zero" }
@@ -23,8 +24,8 @@ export async function posPayment(cardId: number, password: string, businessId: n
     if (cardInfo.balance < amount) {
         throw { type: "bad_request", message: "insuficient balance" }
     }
-
     await paymentRepository.insert({ cardId, businessId, amount });
+
 }
 
 export async function onlinePayment(cardHolderName: string, number: string, securityCode: string, expirationDate: string, businessId: number, amount: number) {
@@ -37,8 +38,7 @@ export async function onlinePayment(cardHolderName: string, number: string, secu
     }
 
     cardService.isExpired(cardData.expirationDate);
-    cardService.checkPassword(securityCode, cardData.securityCode);
-    businessService.findByBusinessId(businessId, cardData.type);
+    await businessService.findByBusinessId(businessId, cardData.type);
 
     if (amount <= 0) {
         throw { type: "bad_request", message: "payment value must be higher than zero" }
